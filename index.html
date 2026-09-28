@@ -54,6 +54,12 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}
 .splashTrack{height:9px;border:1px solid #ffffff80;border-radius:20px;padding:2px;margin:0 auto;width:72%;overflow:hidden}.splashFill{height:100%;width:35%;border-radius:20px;background:#facc15;animation:splashLoad 1.5s ease-in-out forwards}
 .splashCredit{font-size:12px;color:#e9d5ff;margin-top:45px;letter-spacing:1px}@keyframes splashLoad{to{width:100%}}
 
+
+.manageProduct{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:11px;margin:9px 0}
+.manageEmoji{width:54px;height:54px;flex-shrink:0;border-radius:13px;background:#f3e8ff;display:grid;place-items:center;font-size:29px}
+.manageInfo{flex:1;min-width:0}.manageInfo b{display:block;font-size:13px;overflow-wrap:anywhere}.manageInfo small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.manageActions{display:flex;gap:5px}.miniBtn{border:0;border-radius:9px;padding:8px 9px;background:#f3e8ff;color:var(--purple);font-weight:800}.miniBtn.danger{background:#fee2e2;color:#b91c1c}
+
 </style>
 </head>
 <body>
@@ -112,7 +118,8 @@ if(currentPage==="home"){app.innerHTML=`<section class="hero"><div class="heroTe
 else if(currentPage==="products"){app.innerHTML=`${pageTitle("Katalog Produk")}<div class="categories">${cats()}</div><div class="sectionhead"><h3>Semua Camilan</h3><span class="smallnote">${products.length} produk</span></div><div class="products" id="productGrid"></div>`;renderProducts()}
 else if(currentPage==="cart"){app.innerHTML=pageTitle("Keranjang Belanja")+cartHTML()}
 else if(currentPage==="orders"){app.innerHTML=pageTitle("Pesanan Saya")+ordersHTML()}
-else if(currentPage==="more"){app.innerHTML=`<div class="bannerSmall"><h3>🍿 Camilatos</h3><p>Aneka cemilan, teman di setiap momen.</p></div><button class="menuitem" onclick="showPage('products')"><span class="menuIcon">🛍️</span><span><b>Katalog Produk</b><div class="smallnote">Lihat semua camilan</div></span><span class="arr">›</span></button><button class="menuitem" onclick="showPage('orders')"><span class="menuIcon">📦</span><span><b>Riwayat Pesanan</b><div class="smallnote">Pesanan yang pernah dibuat</div></span><span class="arr">›</span></button><button class="menuitem" onclick="settingsModal()"><span class="menuIcon">⚙️</span><span><b>Pengaturan Toko</b><div class="smallnote">Nomor WhatsApp dan profil toko</div></span><span class="arr">›</span></button><button class="menuitem" onclick="aboutModal()"><span class="menuIcon">ℹ️</span><span><b>Tentang Camilatos</b><div class="smallnote">Info toko</div></span><span class="arr">›</span></button><p class="smallnote" style="text-align:center;margin-top:24px">Camilatos Prototype • Created by Dee</p>`}
+else if(currentPage==="manageProducts"){app.innerHTML=pageTitle("Pengaturan Barang","more")+`<div class="panel" style="margin-top:0"><b>Kelola katalog Camilatos</b><p class="smallnote">Produk yang disimpan akan langsung tampil di katalog. Data tersimpan di browser perangkat ini.</p><button class="btn primary" onclick="productForm()">＋ Tambah Barang</button></div><div class="sectionhead"><h3>Daftar Barang</h3><span class="smallnote">${products.length} produk</span></div>${manageProductsHTML()}`}
+else if(currentPage==="more"){app.innerHTML=`<div class="bannerSmall"><h3>🍿 Camilatos</h3><p>Aneka cemilan, teman di setiap momen.</p></div><button class="menuitem" onclick="showPage('products')"><span class="menuIcon">🛍️</span><span><b>Katalog Produk</b><div class="smallnote">Lihat semua camilan</div></span><span class="arr">›</span></button><button class="menuitem" onclick="showPage('manageProducts')"><span class="menuIcon">🧾</span><span><b>Pengaturan Barang</b><div class="smallnote">Tambah, edit, hapus produk, dan atur stok</div></span><span class="arr">›</span></button><button class="menuitem" onclick="showPage('orders')"><span class="menuIcon">📦</span><span><b>Riwayat Pesanan</b><div class="smallnote">Pesanan yang pernah dibuat</div></span><span class="arr">›</span></button><button class="menuitem" onclick="settingsModal()"><span class="menuIcon">⚙️</span><span><b>Pengaturan Toko</b><div class="smallnote">Nomor WhatsApp dan profil toko</div></span><span class="arr">›</span></button><button class="menuitem" onclick="aboutModal()"><span class="menuIcon">ℹ️</span><span><b>Tentang Camilatos</b><div class="smallnote">Info toko</div></span><span class="arr">›</span></button><p class="smallnote" style="text-align:center;margin-top:24px">Camilatos Prototype • Created by Dee</p>`}
 }
 function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});save();toast(p.name+" ditambahkan ke keranjang");if(currentPage==="cart")render()}
 function changeQty(id,d){const x=cart.find(i=>i.id===id);if(!x)return;x.qty+=d;if(x.qty<=0)cart=cart.filter(i=>i.id!==id);save();render()}
@@ -125,6 +132,52 @@ function ordersHTML(){if(!orders.length)return `<div class="empty"><div class="b
 function repeatOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;o.items.forEach(i=>{const exists=cart.find(c=>c.id===i.id);if(exists)exists.qty+=i.qty;else cart.push({...i})});save();showPage("cart")}
 function detail(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Detail Produk</h3><button class="close" onclick="closeModal()">×</button></div><div class="photo ${p.tone||''}" style="height:190px;border-radius:17px;margin:14px 0;font-size:85px">${p.emoji}</div><h2 style="margin:0 0 6px">${p.name}</h2><div class="price" style="font-size:21px">${money(p.price)}</div><p class="smallnote">${p.desc}</p><p class="smallnote">Stok tersedia: ${p.stock} • Kategori: ${p.cat}</p><button class="btn primary" onclick="addToCart(${p.id});closeModal()">＋ Tambah ke Keranjang</button><button class="btn light" style="margin-top:9px" onclick="quickWhatsApp(${p.id})">☘ Tanya via WhatsApp</button></div></div>`}
 function quickWhatsApp(id){const p=products.find(x=>x.id===id);window.open("https://wa.me/"+settings.wa.replace(/\D/g,"")+"?text="+encodeURIComponent(`Halo Camilatos, saya ingin tanya tentang ${p.name} seharga ${money(p.price)}. Apakah masih tersedia?`),"_blank")}
+
+function manageProductsHTML(){
+  if(!products.length)return `<div class="empty"><div class="big">📦</div><h3>Belum ada barang</h3><p>Tambahkan produk pertama Camilatos.</p><button class="btn primary" onclick="productForm()">＋ Tambah Barang</button></div>`;
+  return products.map(p=>`<div class="manageProduct"><div class="manageEmoji">${esc(p.emoji||"🍿")}</div><div class="manageInfo"><b>${esc(p.name)}</b><small>${esc(p.cat)} • ${money(p.price)} • Stok: ${Number(p.stock||0)}</small></div><div class="manageActions"><button class="miniBtn" onclick="productForm(${p.id})" aria-label="Edit ${esc(p.name)}">✎</button><button class="miniBtn danger" onclick="deleteProduct(${p.id})" aria-label="Hapus ${esc(p.name)}">×</button></div></div>`).join("");
+}
+function productForm(id=null){
+  const p=id===null?{name:"",cat:"Keripik",price:"",stock:0,emoji:"🍿",desc:"",tag:""}:products.find(x=>x.id===id);
+  if(!p)return;
+  document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>${id===null?"Tambah Barang":"Edit Barang"}</h3><button class="close" onclick="closeModal()">×</button></div><p class="smallnote">Isi informasi produk. Gunakan emoji sebagai gambar produk sementara.</p><form onsubmit="saveProduct(event,${id===null?"null":id})">
+  <div class="field"><label>Nama barang *</label><input id="prodName" required maxlength="70" value="${esc(p.name)}" placeholder="Contoh: Keripik Pisang"></div>
+  <div class="field"><label>Kategori *</label><select id="prodCat" required>${["Keripik","Kacang","Kue Kering","Snack"].map(c=>`<option ${p.cat===c?"selected":""}>${c}</option>`).join("")}</select></div>
+  <div class="field"><label>Harga (Rupiah) *</label><input id="prodPrice" required type="number" min="0" step="500" inputmode="numeric" value="${esc(p.price)}" placeholder="15000"></div>
+  <div class="field"><label>Stok</label><input id="prodStock" type="number" min="0" step="1" inputmode="numeric" value="${esc(p.stock)}"></div>
+  <div class="field"><label>Emoji / ikon produk</label><input id="prodEmoji" maxlength="8" value="${esc(p.emoji||"🍿")}" placeholder="🍿"></div>
+  <div class="field"><label>Deskripsi</label><textarea id="prodDesc" maxlength="220" placeholder="Deskripsi singkat produk">${esc(p.desc)}</textarea></div>
+  <div class="field"><label>Label (opsional)</label><input id="prodTag" maxlength="24" value="${esc(p.tag||"")}" placeholder="Favorit / Pedas / Baru"></div>
+  <button class="btn primary" type="submit">Simpan Barang</button></form></div></div>`;
+}
+function saveProduct(e,id){
+  e.preventDefault();
+  const name=document.getElementById("prodName").value.trim();
+  const cat=document.getElementById("prodCat").value;
+  const price=Number(document.getElementById("prodPrice").value);
+  const stock=Math.max(0,Number(document.getElementById("prodStock").value||0));
+  const emoji=document.getElementById("prodEmoji").value.trim()||"🍿";
+  const desc=document.getElementById("prodDesc").value.trim();
+  const tag=document.getElementById("prodTag").value.trim();
+  if(!name||!Number.isFinite(price)||price<0){toast("Periksa nama dan harga barang");return}
+  if(id===null){
+    const newId=products.reduce((m,p)=>Math.max(m,Number(p.id)||0),0)+1;
+    products.push({id:newId,name,cat,price,stock,emoji,tone:"purple",desc,tag});
+  }else{
+    const i=products.findIndex(p=>p.id===id);
+    if(i<0)return;
+    products[i]={...products[i],name,cat,price,stock,emoji,desc,tag};
+  }
+  save();closeModal();render();toast(id===null?"Barang berhasil ditambahkan":"Barang berhasil diperbarui");
+}
+function deleteProduct(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Hapus "${p.name}" dari katalog?`))return;
+  products=products.filter(x=>x.id!==id);
+  cart=cart.filter(x=>x.id!==id);
+  save();render();toast("Barang dihapus dari katalog");
+}
+
 function settingsModal(){document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Pengaturan Toko</h3><button class="close" onclick="closeModal()">×</button></div><p class="smallnote">Masukkan nomor WhatsApp admin dalam format internasional tanpa tanda +. Contoh Indonesia: 62812xxxxxxx.</p><form onsubmit="saveSettings(event)"><div class="field"><label>Nama toko</label><input id="setStore" value="${esc(settings.store)}"></div><div class="field"><label>Nomor WhatsApp admin *</label><input id="setWa" required value="${esc(settings.wa)}" placeholder="62812xxxxxxxx"></div><div class="field"><label>Nama admin (opsional)</label><input id="setOwner" value="${esc(settings.owner)}"></div><div class="field"><label>Alamat toko (opsional)</label><textarea id="setAddress">${esc(settings.address)}</textarea></div><button class="btn primary" type="submit">Simpan Pengaturan</button></form><p class="smallnote">Data tersimpan di browser HP ini.</p></div></div>`}
 function saveSettings(e){e.preventDefault();settings={store:document.getElementById("setStore").value.trim()||"Camilatos",wa:document.getElementById("setWa").value.trim(),owner:document.getElementById("setOwner").value.trim(),address:document.getElementById("setAddress").value.trim()};save();closeModal();toast("Pengaturan tersimpan")}
 function aboutModal(){document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Tentang Camilatos</h3><button class="close" onclick="closeModal()">×</button></div><div style="text-align:center;padding:20px"><div style="font-size:60px">🍿</div><h2>Camilatos</h2><p>Aneka Cemilan • Enak Setiap Saat</p><p class="smallnote">Temukan camilan favorit untuk menemani waktu santai, kerja, dan momen bersama keluarga.</p><p class="smallnote">Prototype aplikasi katalog dan pemesanan via WhatsApp.</p></div><button class="btn primary" onclick="closeModal()">Tutup</button></div></div>`}

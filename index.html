@@ -60,6 +60,13 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}
 .manageInfo{flex:1;min-width:0}.manageInfo b{display:block;font-size:13px;overflow-wrap:anywhere}.manageInfo small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
 .manageActions{display:flex;gap:5px}.miniBtn{border:0;border-radius:9px;padding:8px 9px;background:#f3e8ff;color:var(--purple);font-weight:800}.miniBtn.danger{background:#fee2e2;color:#b91c1c}
 
+
+.productPhoto{width:100%;height:100%;object-fit:cover;display:block}
+.managePhoto{width:54px;height:54px;flex-shrink:0;border-radius:13px;object-fit:cover;background:#f3e8ff}
+.uploadPreview{width:100%;height:150px;border:1px dashed #c4b5fd;border-radius:14px;background:#faf5ff;display:grid;place-items:center;overflow:hidden;margin-top:8px;color:#7c3aed}
+.uploadPreview img{width:100%;height:100%;object-fit:contain}
+.fileInput{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+
 </style>
 </head>
 <body>
@@ -111,7 +118,7 @@ function updateCount(){document.getElementById("cartCount").textContent=cart.red
 function showPage(page){currentPage=page;document.getElementById("search").value="";document.getElementById("top").classList.toggle("hidden",!["home","products"].includes(page));document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.page===page));render()}
 function pageTitle(title,back="home"){return `<div class="pageTitle"><button class="back" onclick="showPage('${back}')">‹</button><h2>${title}</h2></div>`}
 function cats(){return ["Semua","Keripik","Kacang","Kue Kering","Snack"].map((c,i)=>`<button class="cat ${activeCat===c?'active':''}" onclick="activeCat='${c}';renderProducts()"><div class="emoji">${["🍿","🥔","🥜","🍪","🧀"][i]}</div>${c}</button>`).join("")}
-function productCard(p){return `<article class="product"><div class="photo ${p.tone||''}" onclick="detail(${p.id})"><span>${p.emoji}</span>${p.tag?`<span class="tag">${p.tag}</span>`:""}</div><div class="pinfo"><h4>${p.name}</h4><div class="desc">${p.desc}</div><div class="priceRow"><span class="price">${money(p.price)}</span><button class="add" onclick="addToCart(${p.id})" aria-label="Tambah ${p.name}">+</button></div></div></article>`}
+function productCard(p){return `<article class="product"><div class="photo ${p.tone||''}" onclick="detail(${p.id})">${p.image?`<img class="productPhoto" src="${p.image}" alt="${esc(p.name)}">`:`<span>${p.emoji||"🍿"}</span>`}${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}</div><div class="pinfo"><h4>${esc(p.name)}</h4><div class="desc">${esc(p.desc)}</div><div class="priceRow"><span class="price">${money(p.price)}</span><button class="add" onclick="addToCart(${p.id})" aria-label="Tambah ${esc(p.name)}">+</button></div></div></article>`}
 function renderProducts(){if(currentPage!=="products"&&currentPage!=="home")return;const q=(document.getElementById("search").value||"").toLowerCase();const list=products.filter(p=>(activeCat==="Semua"||p.cat===activeCat)&&(`${p.name} ${p.cat} ${p.desc}`).toLowerCase().includes(q));const target=document.getElementById("productGrid");if(target)target.innerHTML=list.length?list.map(productCard).join():`<div class="empty" style="grid-column:1/-1"><div class="big">🔎</div><h3>Produk tidak ditemukan</h3><p>Coba kata kunci lain.</p></div>`}
 function render(){const app=document.getElementById("app");
 if(currentPage==="home"){app.innerHTML=`<section class="hero"><div class="heroText"><div class="eyebrow">Camilan mood booster</div><h2>Cemilan Enak<br>Setiap Saat!</h2><p>Teman santai, kerja, dan kumpul bersama.</p><button class="pill" onclick="showPage('products')">Belanja Sekarang →</button></div><div class="heroArt">🍿🥨</div></section><div class="sectionhead"><h3>Kategori Pilihan</h3><button class="link" onclick="showPage('products')">Lihat semua →</button></div><div class="categories">${cats()}</div><div class="sectionhead"><h3>Produk Pilihan</h3><button class="link" onclick="showPage('products')">Lihat semua →</button></div><div class="products" id="productGrid"></div><div class="panel" style="text-align:center"><b>💜 Pesan gampang lewat WhatsApp</b><p class="smallnote">Pilih camilan favorit, masukkan ke keranjang, lalu kirim pesanan ke kami.</p></div>`;renderProducts()}
@@ -130,46 +137,61 @@ function checkoutModal(){if(!cart.length)return;document.getElementById("modalRo
 function sendOrder(e){e.preventDefault();const name=document.getElementById("custName").value.trim(),phone=document.getElementById("custPhone").value.trim(),address=document.getElementById("custAddress").value.trim(),note=document.getElementById("custNote").value.trim();const t=cartTotals();const id="CM"+String(Date.now()).slice(-6);const lines=cart.map(i=>{let p=products.find(p=>p.id===i.id);return `• ${p.name} (${i.qty} x ${money(p.price)}) = ${money(p.price*i.qty)}`}).join("\n");const msg=`Halo Camilatos! Saya ingin memesan camilan 😊\n\nNo. Pesanan: ${id}\nNama: ${name}\nNo. WhatsApp: ${phone}\nAlamat/ambil: ${address||"-"}\n\nPesanan:\n${lines}\n\nTotal sementara: ${money(t.total)}\nCatatan: ${note||"-"}\n\nMohon konfirmasi stok, ongkir, dan metode pembayaran. Terima kasih.`;orders.unshift({id,date:new Date().toLocaleDateString("id-ID"),name,phone,address,note,items:cart.map(i=>({...i})),total:t.total,status:"Menunggu konfirmasi"});cart=[];save();closeModal();showPage("orders");window.open("https://wa.me/"+settings.wa.replace(/\D/g,"")+"?text="+encodeURIComponent(msg),"_blank")}
 function ordersHTML(){if(!orders.length)return `<div class="empty"><div class="big">📦</div><h3>Belum ada pesanan</h3><p>Pesanan yang dibuat akan tampil di sini.</p><button class="btn primary" onclick="showPage('products')">Mulai Belanja</button></div>`;return orders.map(o=>`<div class="ordercard"><div class="orderTop"><div><div class="orderid">#${o.id}</div><p>${o.date} • ${o.items.reduce((s,i)=>s+i.qty,0)} item</p></div><span class="statuspill">${o.status}</span></div><div class="totalrow"><span>Total pesanan</span><b>${money(o.total)}</b></div><button class="btn light" onclick="repeatOrder('${o.id}')">Pesan Lagi</button></div>`).join("")}
 function repeatOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;o.items.forEach(i=>{const exists=cart.find(c=>c.id===i.id);if(exists)exists.qty+=i.qty;else cart.push({...i})});save();showPage("cart")}
-function detail(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Detail Produk</h3><button class="close" onclick="closeModal()">×</button></div><div class="photo ${p.tone||''}" style="height:190px;border-radius:17px;margin:14px 0;font-size:85px">${p.emoji}</div><h2 style="margin:0 0 6px">${p.name}</h2><div class="price" style="font-size:21px">${money(p.price)}</div><p class="smallnote">${p.desc}</p><p class="smallnote">Stok tersedia: ${p.stock} • Kategori: ${p.cat}</p><button class="btn primary" onclick="addToCart(${p.id});closeModal()">＋ Tambah ke Keranjang</button><button class="btn light" style="margin-top:9px" onclick="quickWhatsApp(${p.id})">☘ Tanya via WhatsApp</button></div></div>`}
+function detail(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Detail Produk</h3><button class="close" onclick="closeModal()">×</button></div><div class="photo ${p.tone||''}" style="height:190px;border-radius:17px;margin:14px 0;font-size:85px">${p.image?`<img class="productPhoto" src="${p.image}" alt="${esc(p.name)}">`:p.emoji||"🍿"}</div><h2 style="margin:0 0 6px">${esc(p.name)}</h2><div class="price" style="font-size:21px">${money(p.price)}</div><p class="smallnote">${esc(p.desc)}</p><p class="smallnote">Stok tersedia: ${p.stock} • Kategori: ${esc(p.cat)}</p><button class="btn primary" onclick="addToCart(${p.id});closeModal()">＋ Tambah ke Keranjang</button><button class="btn light" style="margin-top:9px" onclick="quickWhatsApp(${p.id})">☘ Tanya via WhatsApp</button></div></div>`}
 function quickWhatsApp(id){const p=products.find(x=>x.id===id);window.open("https://wa.me/"+settings.wa.replace(/\D/g,"")+"?text="+encodeURIComponent(`Halo Camilatos, saya ingin tanya tentang ${p.name} seharga ${money(p.price)}. Apakah masih tersedia?`),"_blank")}
 
 function manageProductsHTML(){
   if(!products.length)return `<div class="empty"><div class="big">📦</div><h3>Belum ada barang</h3><p>Tambahkan produk pertama Camilatos.</p><button class="btn primary" onclick="productForm()">＋ Tambah Barang</button></div>`;
-  return products.map(p=>`<div class="manageProduct"><div class="manageEmoji">${esc(p.emoji||"🍿")}</div><div class="manageInfo"><b>${esc(p.name)}</b><small>${esc(p.cat)} • ${money(p.price)} • Stok: ${Number(p.stock||0)}</small></div><div class="manageActions"><button class="miniBtn" onclick="productForm(${p.id})" aria-label="Edit ${esc(p.name)}">✎</button><button class="miniBtn danger" onclick="deleteProduct(${p.id})" aria-label="Hapus ${esc(p.name)}">×</button></div></div>`).join("");
+  return products.map(p=>`<div class="manageProduct">${p.image?`<img class="managePhoto" src="${p.image}" alt="${esc(p.name)}">`:`<div class="manageEmoji">${esc(p.emoji||"🍿")}</div>`}<div class="manageInfo"><b>${esc(p.name)}</b><small>${esc(p.cat)} • ${money(p.price)} • Stok: ${Number(p.stock||0)}</small></div><div class="manageActions"><button class="miniBtn" onclick="productForm(${p.id})" aria-label="Edit ${esc(p.name)}">✎</button><button class="miniBtn danger" onclick="deleteProduct(${p.id})" aria-label="Hapus ${esc(p.name)}">×</button></div></div>`).join("");
 }
+let productImageDraft="";
 function productForm(id=null){
-  const p=id===null?{name:"",cat:"Keripik",price:"",stock:0,emoji:"🍿",desc:"",tag:""}:products.find(x=>x.id===id);
+  const p=id===null?{name:"",cat:"Keripik",price:"",stock:0,emoji:"🍿",desc:"",tag:"",image:""}:products.find(x=>x.id===id);
   if(!p)return;
-  document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>${id===null?"Tambah Barang":"Edit Barang"}</h3><button class="close" onclick="closeModal()">×</button></div><p class="smallnote">Isi informasi produk. Gunakan emoji sebagai gambar produk sementara.</p><form onsubmit="saveProduct(event,${id===null?"null":id})">
+  productImageDraft=p.image||"";
+  document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>${id===null?"Tambah Barang":"Edit Barang"}</h3><button class="close" onclick="closeModal()">×</button></div><p class="smallnote">Isi informasi produk dan unggah foto agar katalog lebih menarik.</p><form onsubmit="saveProduct(event,${id===null?"null":id})">
   <div class="field"><label>Nama barang *</label><input id="prodName" required maxlength="70" value="${esc(p.name)}" placeholder="Contoh: Keripik Pisang"></div>
   <div class="field"><label>Kategori *</label><select id="prodCat" required>${["Keripik","Kacang","Kue Kering","Snack"].map(c=>`<option ${p.cat===c?"selected":""}>${c}</option>`).join("")}</select></div>
   <div class="field"><label>Harga (Rupiah) *</label><input id="prodPrice" required type="number" min="0" step="500" inputmode="numeric" value="${esc(p.price)}" placeholder="15000"></div>
   <div class="field"><label>Stok</label><input id="prodStock" type="number" min="0" step="1" inputmode="numeric" value="${esc(p.stock)}"></div>
-  <div class="field"><label>Emoji / ikon produk</label><input id="prodEmoji" maxlength="8" value="${esc(p.emoji||"🍿")}" placeholder="🍿"></div>
+  <div class="field"><label>Upload foto produk</label><input class="fileInput" id="prodImageFile" type="file" accept="image/*" onchange="previewProductImage(event)"><div id="productImagePreview" class="uploadPreview">${productImageDraft?`<img src="${productImageDraft}" alt="Preview foto produk">`:`<span>🖼️ Foto produk belum dipilih</span>`}</div><button class="btn light" type="button" style="margin-top:8px" onclick="clearProductImage()">Hapus Foto</button><p class="smallnote">Foto diperkecil otomatis agar lebih ringan.</p></div>
+  <div class="field"><label>Emoji / ikon cadangan</label><input id="prodEmoji" maxlength="8" value="${esc(p.emoji||"🍿")}" placeholder="🍿"></div>
   <div class="field"><label>Deskripsi</label><textarea id="prodDesc" maxlength="220" placeholder="Deskripsi singkat produk">${esc(p.desc)}</textarea></div>
   <div class="field"><label>Label (opsional)</label><input id="prodTag" maxlength="24" value="${esc(p.tag||"")}" placeholder="Favorit / Pedas / Baru"></div>
   <button class="btn primary" type="submit">Simpan Barang</button></form></div></div>`;
 }
+function previewProductImage(event){
+  const file=event.target.files&&event.target.files[0];if(!file)return;
+  if(!file.type.startsWith("image/")){toast("Pilih file gambar");return}
+  if(file.size>12*1024*1024){toast("Ukuran foto maksimal 12 MB");event.target.value="";return}
+  imageFileToDataURL(file).then(data=>{productImageDraft=data;const box=document.getElementById("productImagePreview");if(box)box.innerHTML=`<img src="${data}" alt="Preview foto produk">`}).catch(()=>toast("Foto tidak dapat dibaca. Coba gambar lain."));
+}
+function imageFileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();reader.onerror=reject;
+    reader.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{
+      const max=900,scale=Math.min(1,max/Math.max(img.width,img.height));
+      const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+      canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL("image/jpeg",0.78));
+    };img.src=reader.result};reader.readAsDataURL(file);
+  });
+}
+function clearProductImage(){
+  productImageDraft="";const input=document.getElementById("prodImageFile");if(input)input.value="";
+  const box=document.getElementById("productImagePreview");if(box)box.innerHTML="<span>🖼️ Foto produk belum dipilih</span>";
+}
 function saveProduct(e,id){
   e.preventDefault();
-  const name=document.getElementById("prodName").value.trim();
-  const cat=document.getElementById("prodCat").value;
-  const price=Number(document.getElementById("prodPrice").value);
-  const stock=Math.max(0,Number(document.getElementById("prodStock").value||0));
-  const emoji=document.getElementById("prodEmoji").value.trim()||"🍿";
-  const desc=document.getElementById("prodDesc").value.trim();
-  const tag=document.getElementById("prodTag").value.trim();
+  const name=document.getElementById("prodName").value.trim(),cat=document.getElementById("prodCat").value;
+  const price=Number(document.getElementById("prodPrice").value),stock=Math.max(0,Number(document.getElementById("prodStock").value||0));
+  const emoji=document.getElementById("prodEmoji").value.trim()||"🍿",desc=document.getElementById("prodDesc").value.trim(),tag=document.getElementById("prodTag").value.trim();
   if(!name||!Number.isFinite(price)||price<0){toast("Periksa nama dan harga barang");return}
-  if(id===null){
-    const newId=products.reduce((m,p)=>Math.max(m,Number(p.id)||0),0)+1;
-    products.push({id:newId,name,cat,price,stock,emoji,tone:"purple",desc,tag});
-  }else{
-    const i=products.findIndex(p=>p.id===id);
-    if(i<0)return;
-    products[i]={...products[i],name,cat,price,stock,emoji,desc,tag};
-  }
-  save();closeModal();render();toast(id===null?"Barang berhasil ditambahkan":"Barang berhasil diperbarui");
+  if(id===null){const newId=products.reduce((m,p)=>Math.max(m,Number(p.id)||0),0)+1;products.push({id:newId,name,cat,price,stock,emoji,tone:"purple",desc,tag,image:productImageDraft})}
+  else{const i=products.findIndex(p=>p.id===id);if(i<0)return;products[i]={...products[i],name,cat,price,stock,emoji,desc,tag,image:productImageDraft}}
+  try{save();closeModal();render();toast(id===null?"Barang berhasil ditambahkan":"Barang berhasil diperbarui")}
+  catch(err){toast("Penyimpanan penuh. Coba foto yang lebih kecil.")}
 }
+
 function deleteProduct(id){
   const p=products.find(x=>x.id===id);if(!p)return;
   if(!confirm(`Hapus "${p.name}" dari katalog?`))return;

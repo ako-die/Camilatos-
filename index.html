@@ -150,7 +150,7 @@ function detail(id){
   <div class="detailActions"><button class="btn primary" ${out?'disabled style="opacity:.5;cursor:not-allowed"':''} onclick="${out?"toast('Stok produk sedang habis')":'addToCart('+p.id+');closeModal()'}">${out?'Stok Habis':'＋ Tambah ke Keranjang'}</button><button class="btn whatsapp" onclick="quickWhatsApp(${p.id})">☘ Tanya / Pesan via WhatsApp</button></div>
   <p class="smallnote" style="text-align:center;margin:12px 0 0">Camilatos • Aneka Cemilan, Enak Setiap Saat</p></div></div>`
 }
-function quickWhatsApp(id){const p=products.find(x=>x.id===id);window.open("https://wa.me/"+settings.wa.replace(/\D/g,"")+"?text="+encodeURIComponent(`Halo Camilatos, saya ingin tanya tentang ${p.name} seharga ${money(p.price)}. Apakah masih tersedia?`),"_blank")}
+function quickWhatsApp(id){const p=products.find(x=>x.id===id);if(!p)return;const out=Number(p.stock||0)<=0;const msg=`Halo ${settings.store||"Camilatos"}! 👋\nSaya tertarik dengan produk berikut:\n\nProduk: ${p.name}\nKategori: ${p.cat||"Camilan"}\nHarga: ${money(p.price)}\nStok: ${out?"Saat ini habis":Number(p.stock||0)+" pcs tersedia"}\n\n${out?"Apakah produk ini bisa dipesan kembali jika stok tersedia?":"Saya ingin bertanya atau memesan produk ini. Mohon info ketersediaan, ongkir, dan cara pembayarannya."}\n\nTerima kasih 😊`;window.open("https://wa.me/"+String(settings.wa||"").replace(/\D/g,"")+"?text="+encodeURIComponent(msg),"_blank")}
 
 function manageProductsHTML(){
   if(!products.length)return `<div class="empty"><div class="big">📦</div><h3>Belum ada barang</h3><p>Tambahkan produk pertama Camilatos.</p><button class="btn primary" onclick="productForm()">＋ Tambah Barang</button></div>`;

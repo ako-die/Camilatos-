@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#5b21b6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Camilatos — Aneka Cemilan</title>
+<style>
+:root{--purple:#5b21b6;--purple2:#7c3aed;--lav:#f3e8ff;--ink:#24133d;--muted:#81758f;--yellow:#facc15;--green:#16a34a;--line:#eee7f5;--bg:#faf8ff}
+*{box-sizing:border-box}body{margin:0;background:#eeeaf4;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.phone{width:100%;max-width:480px;min-height:100dvh;margin:auto;background:var(--bg);position:relative;box-shadow:0 0 40px #2d17401a;overflow:hidden;padding-bottom:86px}
+.top{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:18px 18px 24px;border-radius:0 0 26px 26px}
+.status{display:flex;justify-content:space-between;font-size:11px;opacity:.9;margin-bottom:17px}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:48px;height:48px;border-radius:16px;background:#fff;color:var(--purple);display:grid;place-items:center;font-size:27px;box-shadow:0 5px 0 #facc15}
+.brand h1{font-size:23px;line-height:1;margin:0;font-weight:900;letter-spacing:-.8px}.brand small{display:block;color:#e9d5ff;font-size:11px;margin-top:5px}
+.iconbtn{border:1px solid #ffffff50;background:#ffffff1c;color:white;border-radius:14px;width:43px;height:43px;font-size:19px;position:relative}
+.count{position:absolute;right:-5px;top:-5px;background:#facc15;color:#3b0764;border-radius:99px;min-width:19px;height:19px;font-size:11px;font-weight:800;display:grid;place-items:center}
+.searchwrap{margin-top:20px;position:relative}.searchwrap span{position:absolute;left:14px;top:12px;color:#8b7a9d}.search{width:100%;height:45px;border:0;border-radius:14px;padding:0 14px 0 40px;background:white;color:var(--ink);outline:none;box-shadow:0 5px 18px #32105b12}
+.content{padding:18px}.hero{background:linear-gradient(115deg,#6d28d9,#9333ea);color:white;border-radius:22px;min-height:164px;padding:20px;position:relative;overflow:hidden;display:flex;align-items:center;margin-bottom:21px}
+.hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#ffffff12;right:-48px;top:-45px}
+.heroText{position:relative;z-index:1;max-width:65%}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#fef08a;font-weight:800}.hero h2{font-size:25px;line-height:1.1;margin:8px 0}.hero p{font-size:12px;color:#f3e8ff;margin:0 0 13px}.hero .pill{background:#facc15;color:#3b0764;border:0;padding:9px 13px;border-radius:10px;font-size:12px;font-weight:800}
+.heroArt{position:absolute;right:0;bottom:0;font-size:70px;transform:rotate(-10deg);z-index:1;filter:drop-shadow(0 8px 5px #2e106055)}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px}.sectionhead h3{font-size:17px;margin:0}.link{border:0;background:none;color:var(--purple);font-weight:800;font-size:12px}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.cat{border:1px solid var(--line);background:white;border-radius:16px;padding:12px 4px 10px;text-align:center;color:var(--ink);font-size:11px;font-weight:700}.cat .emoji{width:43px;height:43px;margin:0 auto 7px;border-radius:14px;background:#f3e8ff;display:grid;place-items:center;font-size:25px}.cat.active{background:#ede9fe;border:1.5px solid #8b5cf6;color:#5b21b6}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product{background:white;border:1px solid var(--line);border-radius:17px;overflow:hidden;min-width:0;box-shadow:0 3px 12px #4c1d9508}.photo{height:130px;background:linear-gradient(135deg,#fef3c7,#ffedd5);display:grid;place-items:center;position:relative;font-size:57px}.photo.pink{background:linear-gradient(135deg,#fce7f3,#ffedd5)}.photo.green{background:linear-gradient(135deg,#dcfce7,#fef9c3)}.photo.purple{background:linear-gradient(135deg,#ede9fe,#fae8ff)}.tag{position:absolute;top:9px;left:9px;background:#fff;border-radius:7px;padding:5px 7px;font-size:9px;font-weight:800;color:#7e22ce}
+.pinfo{padding:11px}.pinfo h4{font-size:13px;margin:0 0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.desc{font-size:10px;color:var(--muted);min-height:26px;line-height:1.35}.priceRow{display:flex;align-items:center;justify-content:space-between;margin-top:9px;gap:5px}.price{font-size:14px;font-weight:900;color:var(--purple)}.add{border:0;border-radius:10px;background:var(--purple);color:white;width:31px;height:31px;font-size:20px;line-height:1}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 7px calc(9px + env(safe-area-inset-bottom));z-index:20}.nav{border:0;background:none;color:#9a8eaa;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px}.nav b{font-size:21px;font-weight:500}.nav.active{color:var(--purple);font-weight:800}
+.pageTitle{display:flex;align-items:center;gap:10px;margin:0 0 18px}.pageTitle h2{font-size:21px;margin:0}.back{border:0;background:#ede9fe;color:var(--purple);border-radius:12px;width:38px;height:38px;font-size:20px}
+.empty{padding:35px 15px;text-align:center;background:white;border:1px dashed #d8c9e8;border-radius:20px;color:var(--muted)}.empty .big{font-size:52px}.empty h3{color:var(--ink);margin:10px 0 5px}
+.cartitem{display:flex;gap:11px;padding:12px;background:white;border:1px solid var(--line);border-radius:15px;margin-bottom:10px}.miniPhoto{width:70px;height:70px;border-radius:12px;background:#fef3c7;display:grid;place-items:center;font-size:34px;flex-shrink:0}.cartdetails{flex:1;min-width:0}.cartdetails h4{margin:2px 0 5px;font-size:13px}.cartdetails .price{font-size:13px}.qty{display:flex;align-items:center;gap:11px;margin-top:9px}.qty button{border:1px solid var(--line);background:#faf7ff;border-radius:8px;width:28px;height:28px;color:var(--purple);font-weight:800}.remove{border:0;background:none;color:#a78bba;font-size:17px}
+.panel{background:white;border:1px solid var(--line);border-radius:17px;padding:15px;margin-top:14px}.totalrow{display:flex;justify-content:space-between;font-size:13px;margin:9px 0;color:#6d607c}.totalrow.final{font-weight:900;color:var(--ink);font-size:17px;border-top:1px solid var(--line);padding-top:13px;margin-top:13px}
+.btn{border:0;border-radius:13px;padding:14px 16px;font-weight:800;width:100%;display:flex;justify-content:center;align-items:center;gap:8px}.btn.primary{background:var(--purple);color:white}.btn.whatsapp{background:#16a34a;color:white}.btn.light{background:#f3e8ff;color:var(--purple)}
+.field{display:flex;flex-direction:column;gap:7px;margin:12px 0}.field label{font-size:12px;font-weight:800}.field input,.field textarea,.field select{width:100%;border:1px solid #e4d9ef;border-radius:12px;padding:12px;background:#fff;outline-color:#a78bfa;color:var(--ink)}.field textarea{min-height:76px;resize:vertical}
+.ordercard{background:white;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:11px}.orderTop{display:flex;justify-content:space-between;gap:10px}.orderid{font-weight:900;font-size:13px}.statuspill{background:#dcfce7;color:#166534;border-radius:8px;padding:5px 8px;font-size:10px;font-weight:800;height:max-content}.ordercard p{font-size:12px;color:var(--muted);margin:7px 0}
+.bannerSmall{border-radius:18px;background:linear-gradient(120deg,#5b21b6,#9333ea);padding:18px;color:white;margin-bottom:14px}.bannerSmall h3{margin:0 0 5px}.bannerSmall p{font-size:12px;margin:0;color:#ede9fe}
+.menuitem{width:100%;display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--line);padding:14px;border-radius:14px;margin:9px 0;text-align:left;color:var(--ink)}.menuIcon{width:38px;height:38px;border-radius:12px;background:#f3e8ff;display:grid;place-items:center;font-size:19px}.menuitem .arr{margin-left:auto;color:#a78bba}
+.smallnote{font-size:11px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#24133d;color:white;padding:11px 16px;border-radius:12px;font-size:12px;z-index:50;box-shadow:0 8px 25px #0002;max-width:90%;white-space:nowrap}
+.modalbg{position:fixed;inset:0;background:#1e103b80;z-index:40;display:flex;align-items:flex-end;justify-content:center}.modal{width:100%;max-width:480px;background:#fff;border-radius:24px 24px 0 0;padding:22px 20px 30px;max-height:90dvh;overflow:auto}.modalHead{display:flex;justify-content:space-between;align-items:center}.modalHead h3{margin:0}.close{border:0;background:#f3e8ff;color:var(--purple);border-radius:50%;width:34px;height:34px;font-size:20px}
+@media(min-width:600px){body{padding:20px 0}.phone{min-height:calc(100dvh - 40px);border-radius:28px}.bottom{bottom:20px;border-radius:0 0 28px 28px}.modalbg{align-items:center}.modal{border-radius:24px}}
+
+#splashScreen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 36%,#7c3aed 0,#5b21b6 42%,#2e1065 100%);color:white;transition:opacity .45s ease,visibility .45s ease;overflow:hidden}
+#splashScreen.hide{opacity:0;visibility:hidden;pointer-events:none}.splashDecor{position:absolute;border-radius:50%;background:#ffffff0b}
+.splashDecor.d1{width:280px;height:280px;top:-100px;left:-90px}.splashDecor.d2{width:360px;height:360px;right:-160px;bottom:80px}
+.splashInner{width:min(88%,420px);text-align:center;position:relative;z-index:1}.splashLogo{width:122px;height:122px;border-radius:34px;background:linear-gradient(145deg,#fff,#f5eaff);margin:0 auto 22px;display:grid;place-items:center;box-shadow:0 12px 0 #facc15,0 24px 50px #1e084d55;border:4px solid #fff;color:#5b21b6;font-size:64px}
+.splashBrand{font-size:clamp(42px,12vw,60px);font-weight:950;letter-spacing:-2px;line-height:1;text-shadow:0 4px 0 #3b0764}.splashRibbon{display:inline-block;background:#facc15;color:#3b0764;font-weight:900;padding:8px 22px;border-radius:9px;transform:rotate(-2deg);margin-top:10px}
+.splashTag{font-size:20px;font-weight:800;margin:35px 0 8px}.splashSub{font-size:13px;color:#e9d5ff}.splashSnacks{font-size:45px;letter-spacing:7px;margin:28px 0 24px;filter:drop-shadow(0 7px 6px #24084c66)}
+.splashTrack{height:9px;border:1px solid #ffffff80;border-radius:20px;padding:2px;margin:0 auto;width:72%;overflow:hidden}.splashFill{height:100%;width:35%;border-radius:20px;background:#facc15;animation:splashLoad 1.5s ease-in-out forwards}
+.splashCredit{font-size:12px;color:#e9d5ff;margin-top:45px;letter-spacing:1px}@keyframes splashLoad{to{width:100%}}
+
+
+.manageProduct{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:11px;margin:9px 0}
+.manageEmoji{width:54px;height:54px;flex-shrink:0;border-radius:13px;background:#f3e8ff;display:grid;place-items:center;font-size:29px}
+.manageInfo{flex:1;min-width:0}.manageInfo b{display:block;font-size:13px;overflow-wrap:anywhere}.manageInfo small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.manageActions{display:flex;gap:5px}.miniBtn{border:0;border-radius:9px;padding:8px 9px;background:#f3e8ff;color:var(--purple);font-weight:800}.miniBtn.danger{background:#fee2e2;color:#b91c1c}
+
+
+.productPhoto{width:100%;height:100%;object-fit:cover;display:block}
+.managePhoto{width:54px;height:54px;flex-shrink:0;border-radius:13px;object-fit:cover;background:#f3e8ff}
+.uploadPreview{width:100%;height:150px;border:1px dashed #c4b5fd;border-radius:14px;background:#faf5ff;display:grid;place-items:center;overflow:hidden;margin-top:8px;color:#7c3aed}
+.uploadPreview img{width:100%;height:100%;object-fit:contain}
+.fileInput{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+
+</style>
+</head>
+<body>
+
+<div id="splashScreen" aria-label="Camilatos memuat aplikasi"><div class="splashDecor d1"></div><div class="splashDecor d2"></div>
+<div class="splashInner"><div class="splashLogo">🍿</div><div class="splashBrand">Camilatos</div><div class="splashRibbon">Aneka Cemilan</div>
+<div class="splashTag">Cemilan Enak Setiap Saat</div><div class="splashSub">Teman santai di setiap momen 💜</div>
+<div class="splashSnacks">🍌 🥨 🍿 🥜</div><div class="splashTrack"><div class="splashFill"></div></div>
+<div class="splashSub" style="margin-top:10px">Memuat aplikasi...</div><div class="splashCredit">Created by Dee</div></div></div>
+
+<div class="phone">
+  <header class="top" id="top">
+    <div class="status"><span>9:41</span><span>● ● ▰</span></div>
+    <div class="brandrow">
+      <div class="brand"><div class="logo">🍿</div><div><h1>Camilatos</h1><small>Aneka Cemilan • Enak Setiap Saat</small></div></div>
+      <button class="iconbtn" onclick="showPage('cart')" aria-label="Keranjang">🛒<span class="count" id="cartCount">0</span></button>
+    </div>
+    <div class="searchwrap"><span>⌕</span><input class="search" id="search" placeholder="Cari camilan favorit..." oninput="renderProducts()"></div>
+  </header>
+  <main class="content" id="app"></main>
+  <nav class="bottom">
+    <button class="nav active" data-page="home" onclick="showPage('home')"><b>⌂</b>Beranda</button>
+    <button class="nav" data-page="products" onclick="showPage('products')"><b>▦</b>Produk</button>
+    <button class="nav" data-page="cart" onclick="showPage('cart')"><b>🛒</b>Keranjang</button>
+    <button class="nav" data-page="orders" onclick="showPage('orders')"><b>▤</b>Pesanan</button>
+    <button class="nav" data-page="more" onclick="showPage('more')"><b>•••</b>Lainnya</button>
+  </nav>
+</div>
+<div id="modalRoot"></div>
+<script>
+const defaultProducts=[
+{id:1,name:"Keripik Pisang",cat:"Keripik",price:15000,stock:50,emoji:"🍌",tone:"",desc:"Keripik pisang renyah dengan rasa manis gurih.",tag:"Favorit"},
+{id:2,name:"Kacang Bawang",cat:"Kacang",price:20000,stock:35,emoji:"🥜",tone:"green",desc:"Kacang pilihan, gurih dan pas untuk teman santai.",tag:"Best seller"},
+{id:3,name:"Keripik Singkong",cat:"Keripik",price:15000,stock:40,emoji:"🥔",tone:"pink",desc:"Singkong tipis yang renyah dan bikin nagih.",tag:""},
+{id:4,name:"Stik Keju",cat:"Snack",price:18000,stock:28,emoji:"🧀",tone:"",desc:"Stik keju gurih dengan tekstur renyah.",tag:""},
+{id:5,name:"Makaroni Pedas",cat:"Snack",price:20000,stock:24,emoji:"🌶️",tone:"pink",desc:"Camilan makaroni dengan sensasi pedas.",tag:"Pedas"},
+{id:6,name:"Kue Semprit",cat:"Kue Kering",price:22000,stock:20,emoji:"🍪",tone:"green",desc:"Kue kering lembut, cocok untuk suguhan.",tag:""},
+{id:7,name:"Basreng",cat:"Snack",price:17000,stock:30,emoji:"🍘",tone:"purple",desc:"Basreng gurih dengan bumbu pilihan.",tag:""},
+{id:8,name:"Keripik Tempe",cat:"Keripik",price:16000,stock:32,emoji:"🥠",tone:"",desc:"Keripik tempe renyah untuk segala suasana.",tag:""}
+];
+let products=JSON.parse(localStorage.getItem("camilatos_products")||"null")||defaultProducts;
+let cart=JSON.parse(localStorage.getItem("camilatos_cart")||"[]");
+let orders=JSON.parse(localStorage.getItem("camilatos_orders")||"[]");
+let settings=JSON.parse(localStorage.getItem("camilatos_settings")||"null")||{wa:"6281234567890",store:"Camilatos",owner:"",address:""};
+let currentPage="home",activeCat="Semua";
+const money=n=>"Rp"+Number(n||0).toLocaleString("id-ID");
+const save=()=>{localStorage.setItem("camilatos_cart",JSON.stringify(cart));localStorage.setItem("camilatos_orders",JSON.stringify(orders));localStorage.setItem("camilatos_products",JSON.stringify(products));localStorage.setItem("camilatos_settings",JSON.stringify(settings));updateCount()};
+function updateCount(){document.getElementById("cartCount").textContent=cart.reduce((s,x)=>s+x.qty,0)}
+function showPage(page){currentPage=page;document.getElementById("search").value="";document.getElementById("top").classList.toggle("hidden",!["home","products"].includes(page));document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.page===page));render()}
+function pageTitle(title,back="home"){return `<div class="pageTitle"><button class="back" onclick="showPage('${back}')">‹</button><h2>${title}</h2></div>`}
+function cats(){return ["Semua","Keripik","Kacang","Kue Kering","Snack"].map((c,i)=>`<button class="cat ${activeCat===c?'active':''}" onclick="activeCat='${c}';renderProducts()"><div class="emoji">${["🍿","🥔","🥜","🍪","🧀"][i]}</div>${c}</button>`).join("")}
+function productCard(p){return `<article class="product"><div class="photo ${p.tone||''}" onclick="detail(${p.id})">${p.image?`<img class="productPhoto" src="${p.image}" alt="${esc(p.name)}">`:`<span>${p.emoji||"🍿"}</span>`}${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}</div><div class="pinfo"><h4>${esc(p.name)}</h4><div class="desc">${esc(p.desc)}</div><div class="priceRow"><span class="price">${money(p.price)}</span><button class="add" onclick="addToCart(${p.id})" aria-label="Tambah ${esc(p.name)}">+</button></div></div></article>`}
+function renderProducts(){if(currentPage!=="products"&&currentPage!=="home")return;const q=(document.getElementById("search").value||"").toLowerCase();const list=products.filter(p=>(activeCat==="Semua"||p.cat===activeCat)&&(`${p.name} ${p.cat} ${p.desc}`).toLowerCase().includes(q));const target=document.getElementById("productGrid");if(target)target.innerHTML=list.length?list.map(productCard).join():`<div class="empty" style="grid-column:1/-1"><div class="big">🔎</div><h3>Produk tidak ditemukan</h3><p>Coba kata kunci lain.</p></div>`}
+function render(){const app=document.getElementById("app");
+if(currentPage==="home"){app.innerHTML=`<section class="hero"><div class="heroText"><div class="eyebrow">Camilan mood booster</div><h2>Cemilan Enak<br>Setiap Saat!</h2><p>Teman santai, kerja, dan kumpul bersama.</p><button class="pill" onclick="showPage('products')">Belanja Sekarang →</button></div><div class="heroArt">🍿🥨</div></section><div class="sectionhead"><h3>Kategori Pilihan</h3><button class="link" onclick="showPage('products')">Lihat semua →</button></div><div class="categories">${cats()}</div><div class="sectionhead"><h3>Produk Pilihan</h3><button class="link" onclick="showPage('products')">Lihat semua →</button></div><div class="products" id="productGrid"></div><div class="panel" style="text-align:center"><b>💜 Pesan gampang lewat WhatsApp</b><p class="smallnote">Pilih camilan favorit, masukkan ke keranjang, lalu kirim pesanan ke kami.</p></div>`;renderProducts()}
+else if(currentPage==="products"){app.innerHTML=`${pageTitle("Katalog Produk")}<div class="categories">${cats()}</div><div class="sectionhead"><h3>Semua Camilan</h3><span class="smallnote">${products.length} produk</span></div><div class="products" id="productGrid"></div>`;renderProducts()}
+else if(currentPage==="cart"){app.innerHTML=pageTitle("Keranjang Belanja")+cartHTML()}
+else if(currentPage==="orders"){app.innerHTML=pageTitle("Pesanan Saya")+ordersHTML()}
+else if(currentPage==="manageProducts"){app.innerHTML=pageTitle("Pengaturan Barang","more")+`<div class="panel" style="margin-top:0"><b>Kelola katalog Camilatos</b><p class="smallnote">Produk yang disimpan akan langsung tampil di katalog. Data tersimpan di browser perangkat ini.</p><button class="btn primary" onclick="productForm()">＋ Tambah Barang</button></div><div class="sectionhead"><h3>Daftar Barang</h3><span class="smallnote">${products.length} produk</span></div>${manageProductsHTML()}`}
+else if(currentPage==="more"){app.innerHTML=`<div class="bannerSmall"><h3>🍿 Camilatos</h3><p>Aneka cemilan, teman di setiap momen.</p></div><button class="menuitem" onclick="showPage('products')"><span class="menuIcon">🛍️</span><span><b>Katalog Produk</b><div class="smallnote">Lihat semua camilan</div></span><span class="arr">›</span></button><button class="menuitem" onclick="showPage('manageProducts')"><span class="menuIcon">🧾</span><span><b>Pengaturan Barang</b><div class="smallnote">Tambah, edit, hapus produk, dan atur stok</div></span><span class="arr">›</span></button><button class="menuitem" onclick="showPage('orders')"><span class="menuIcon">📦</span><span><b>Riwayat Pesanan</b><div class="smallnote">Pesanan yang pernah dibuat</div></span><span class="arr">›</span></button><button class="menuitem" onclick="settingsModal()"><span class="menuIcon">⚙️</span><span><b>Pengaturan Toko</b><div class="smallnote">Nomor WhatsApp dan profil toko</div></span><span class="arr">›</span></button><button class="menuitem" onclick="aboutModal()"><span class="menuIcon">ℹ️</span><span><b>Tentang Camilatos</b><div class="smallnote">Info toko</div></span><span class="arr">›</span></button><p class="smallnote" style="text-align:center;margin-top:24px">Camilatos Prototype • Created by Dee</p>`}
+}
+function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});save();toast(p.name+" ditambahkan ke keranjang");if(currentPage==="cart")render()}
+function changeQty(id,d){const x=cart.find(i=>i.id===id);if(!x)return;x.qty+=d;if(x.qty<=0)cart=cart.filter(i=>i.id!==id);save();render()}
+function removeItem(id){cart=cart.filter(i=>i.id!==id);save();render()}
+function cartTotals(){let count=0,total=0;cart.forEach(i=>{let p=products.find(p=>p.id===i.id);if(p){count+=i.qty;total+=p.price*i.qty}});return {count,total}}
+function cartHTML(){if(!cart.length)return `<div class="empty"><div class="big">🛍️</div><h3>Keranjang masih kosong</h3><p>Yuk pilih camilan favoritmu!</p><button class="btn primary" onclick="showPage('products')">Lihat Katalog</button></div>`;let t=cartTotals();return `<div>${cart.map(i=>{let p=products.find(p=>p.id===i.id);return p?`<div class="cartitem"><div class="miniPhoto">${p.emoji}</div><div class="cartdetails"><h4>${p.name}</h4><div class="smallnote">Pilihan camilan Camilatos</div><div class="price">${money(p.price)}</div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><b>${i.qty}</b><button onclick="changeQty(${p.id},1)">+</button></div></div><button class="remove" onclick="removeItem(${p.id})">⌫</button></div>`:""}).join("")}</div><div class="panel"><div class="totalrow"><span>Jumlah produk</span><b>${t.count} item</b></div><div class="totalrow"><span>Subtotal</span><b>${money(t.total)}</b></div><div class="totalrow"><span>Ongkir</span><span>Dikonfirmasi via WhatsApp</span></div><div class="totalrow final"><span>Total sementara</span><span>${money(t.total)}</span></div><button class="btn whatsapp" style="margin-top:14px" onclick="checkoutModal()">☘ Pesan via WhatsApp</button><p class="smallnote">Ongkir dan metode pembayaran dikonfirmasi langsung dengan admin.</p></div>`}
+function checkoutModal(){if(!cart.length)return;document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Detail Pesanan</h3><button class="close" onclick="closeModal()">×</button></div><p class="smallnote">Lengkapi data agar admin Camilatos dapat memproses pesanan.</p><form onsubmit="sendOrder(event)"><div class="field"><label>Nama pemesan *</label><input id="custName" required placeholder="Nama Anda"></div><div class="field"><label>Nomor WhatsApp *</label><input id="custPhone" required inputmode="tel" placeholder="08xxxxxxxxxx"></div><div class="field"><label>Alamat / metode pengambilan</label><textarea id="custAddress" placeholder="Alamat lengkap atau ambil sendiri"></textarea></div><div class="field"><label>Catatan pesanan</label><textarea id="custNote" placeholder="Contoh: level pedas, patokan alamat..."></textarea></div><button class="btn whatsapp" type="submit">☘ Lanjutkan ke WhatsApp</button></form></div></div>`}
+function sendOrder(e){e.preventDefault();const name=document.getElementById("custName").value.trim(),phone=document.getElementById("custPhone").value.trim(),address=document.getElementById("custAddress").value.trim(),note=document.getElementById("custNote").value.trim();const t=cartTotals();const id="CM"+String(Date.now()).slice(-6);const lines=cart.map(i=>{let p=products.find(p=>p.id===i.id);return `• ${p.name} (${i.qty} x ${money(p.price)}) = ${money(p.price*i.qty)}`}).join("\n");const msg=`Halo Camilatos! Saya ingin memesan camilan 😊\n\nNo. Pesanan: ${id}\nNama: ${name}\nNo. WhatsApp: ${phone}\nAlamat/ambil: ${address||"-"}\n\nPesanan:\n${lines}\n\nTotal sementara: ${money(t.total)}\nCatatan: ${note||"-"}\n\nMohon konfirmasi stok, ongkir, dan metode pembayaran. Terima kasih.`;orders.unshift({id,date:new Date().toLocaleDateString("id-ID"),name,phone,address,note,items:cart.map(i=>({...i})),total:t.total,status:"Menunggu konfirmasi"});cart=[];save();closeModal();showPage("orders");window.open("https://wa.me/"+settings.wa.replace(/\D/g,"")+"?text="+encodeURIComponent(msg),"_blank")}
+function ordersHTML(){if(!orders.length)return `<div class="empty"><div class="big">📦</div><h3>Belum ada pesanan</h3><p>Pesanan yang dibuat akan tampil di sini.</p><button class="btn primary" onclick="showPage('products')">Mulai Belanja</button></div>`;return orders.map(o=>`<div class="ordercard"><div class="orderTop"><div><div class="orderid">#${o.id}</div><p>${o.date} • ${o.items.reduce((s,i)=>s+i.qty,0)} item</p></div><span class="statuspill">${o.status}</span></div><div class="totalrow"><span>Total pesanan</span><b>${money(o.total)}</b></div><button class="btn light" onclick="repeatOrder('${o.id}')">Pesan Lagi</button></div>`).join("")}
+function repeatOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;o.items.forEach(i=>{const exists=cart.find(c=>c.id===i.id);if(exists)exists.qty+=i.qty;else cart.push({...i})});save();showPage("cart")}
+function detail(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Detail Produk</h3><button class="close" onclick="closeModal()">×</button></div><div class="photo ${p.tone||''}" style="height:190px;border-radius:17px;margin:14px 0;font-size:85px">${p.image?`<img class="productPhoto" src="${p.image}" alt="${esc(p.name)}">`:p.emoji||"🍿"}</div><h2 style="margin:0 0 6px">${esc(p.name)}</h2><div class="price" style="font-size:21px">${money(p.price)}</div><p class="smallnote">${esc(p.desc)}</p><p class="smallnote">Stok tersedia: ${p.stock} • Kategori: ${esc(p.cat)}</p><button class="btn primary" onclick="addToCart(${p.id});closeModal()">＋ Tambah ke Keranjang</button><button class="btn light" style="margin-top:9px" onclick="quickWhatsApp(${p.id})">☘ Tanya via WhatsApp</button></div></div>`}
+function quickWhatsApp(id){const p=products.find(x=>x.id===id);window.open("https://wa.me/"+settings.wa.replace(/\D/g,"")+"?text="+encodeURIComponent(`Halo Camilatos, saya ingin tanya tentang ${p.name} seharga ${money(p.price)}. Apakah masih tersedia?`),"_blank")}
+
+function manageProductsHTML(){
+  if(!products.length)return `<div class="empty"><div class="big">📦</div><h3>Belum ada barang</h3><p>Tambahkan produk pertama Camilatos.</p><button class="btn primary" onclick="productForm()">＋ Tambah Barang</button></div>`;
+  return products.map(p=>`<div class="manageProduct">${p.image?`<img class="managePhoto" src="${p.image}" alt="${esc(p.name)}">`:`<div class="manageEmoji">${esc(p.emoji||"🍿")}</div>`}<div class="manageInfo"><b>${esc(p.name)}</b><small>${esc(p.cat)} • ${money(p.price)} • Stok: ${Number(p.stock||0)}</small></div><div class="manageActions"><button class="miniBtn" onclick="productForm(${p.id})" aria-label="Edit ${esc(p.name)}">✎</button><button class="miniBtn danger" onclick="deleteProduct(${p.id})" aria-label="Hapus ${esc(p.name)}">×</button></div></div>`).join("");
+}
+let productImageDraft="";
+function productForm(id=null){
+  const p=id===null?{name:"",cat:"Keripik",price:"",stock:0,emoji:"🍿",desc:"",tag:"",image:""}:products.find(x=>x.id===id);
+  if(!p)return;
+  productImageDraft=p.image||"";
+  document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>${id===null?"Tambah Barang":"Edit Barang"}</h3><button class="close" onclick="closeModal()">×</button></div><p class="smallnote">Isi informasi produk dan unggah foto agar katalog lebih menarik.</p><form onsubmit="saveProduct(event,${id===null?"null":id})">
+  <div class="field"><label>Nama barang *</label><input id="prodName" required maxlength="70" value="${esc(p.name)}" placeholder="Contoh: Keripik Pisang"></div>
+  <div class="field"><label>Kategori *</label><select id="prodCat" required>${["Keripik","Kacang","Kue Kering","Snack"].map(c=>`<option ${p.cat===c?"selected":""}>${c}</option>`).join("")}</select></div>
+  <div class="field"><label>Harga (Rupiah) *</label><input id="prodPrice" required type="number" min="0" step="500" inputmode="numeric" value="${esc(p.price)}" placeholder="15000"></div>
+  <div class="field"><label>Stok</label><input id="prodStock" type="number" min="0" step="1" inputmode="numeric" value="${esc(p.stock)}"></div>
+  <div class="field"><label>Upload foto produk</label><input class="fileInput" id="prodImageFile" type="file" accept="image/*" onchange="previewProductImage(event)"><div id="productImagePreview" class="uploadPreview">${productImageDraft?`<img src="${productImageDraft}" alt="Preview foto produk">`:`<span>🖼️ Foto produk belum dipilih</span>`}</div><button class="btn light" type="button" style="margin-top:8px" onclick="clearProductImage()">Hapus Foto</button><p class="smallnote">Foto diperkecil otomatis agar lebih ringan.</p></div>
+  <div class="field"><label>Emoji / ikon cadangan</label><input id="prodEmoji" maxlength="8" value="${esc(p.emoji||"🍿")}" placeholder="🍿"></div>
+  <div class="field"><label>Deskripsi</label><textarea id="prodDesc" maxlength="220" placeholder="Deskripsi singkat produk">${esc(p.desc)}</textarea></div>
+  <div class="field"><label>Label (opsional)</label><input id="prodTag" maxlength="24" value="${esc(p.tag||"")}" placeholder="Favorit / Pedas / Baru"></div>
+  <button class="btn primary" type="submit">Simpan Barang</button></form></div></div>`;
+}
+function previewProductImage(event){
+  const file=event.target.files&&event.target.files[0];if(!file)return;
+  if(!file.type.startsWith("image/")){toast("Pilih file gambar");return}
+  if(file.size>12*1024*1024){toast("Ukuran foto maksimal 12 MB");event.target.value="";return}
+  imageFileToDataURL(file).then(data=>{productImageDraft=data;const box=document.getElementById("productImagePreview");if(box)box.innerHTML=`<img src="${data}" alt="Preview foto produk">`}).catch(()=>toast("Foto tidak dapat dibaca. Coba gambar lain."));
+}
+function imageFileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();reader.onerror=reject;
+    reader.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{
+      const max=900,scale=Math.min(1,max/Math.max(img.width,img.height));
+      const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+      canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL("image/jpeg",0.78));
+    };img.src=reader.result};reader.readAsDataURL(file);
+  });
+}
+function clearProductImage(){
+  productImageDraft="";const input=document.getElementById("prodImageFile");if(input)input.value="";
+  const box=document.getElementById("productImagePreview");if(box)box.innerHTML="<span>🖼️ Foto produk belum dipilih</span>";
+}
+function saveProduct(e,id){
+  e.preventDefault();
+  const name=document.getElementById("prodName").value.trim(),cat=document.getElementById("prodCat").value;
+  const price=Number(document.getElementById("prodPrice").value),stock=Math.max(0,Number(document.getElementById("prodStock").value||0));
+  const emoji=document.getElementById("prodEmoji").value.trim()||"🍿",desc=document.getElementById("prodDesc").value.trim(),tag=document.getElementById("prodTag").value.trim();
+  if(!name||!Number.isFinite(price)||price<0){toast("Periksa nama dan harga barang");return}
+  if(id===null){const newId=products.reduce((m,p)=>Math.max(m,Number(p.id)||0),0)+1;products.push({id:newId,name,cat,price,stock,emoji,tone:"purple",desc,tag,image:productImageDraft})}
+  else{const i=products.findIndex(p=>p.id===id);if(i<0)return;products[i]={...products[i],name,cat,price,stock,emoji,desc,tag,image:productImageDraft}}
+  try{save();closeModal();render();toast(id===null?"Barang berhasil ditambahkan":"Barang berhasil diperbarui")}
+  catch(err){toast("Penyimpanan penuh. Coba foto yang lebih kecil.")}
+}
+
+function deleteProduct(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Hapus "${p.name}" dari katalog?`))return;
+  products=products.filter(x=>x.id!==id);
+  cart=cart.filter(x=>x.id!==id);
+  save();render();toast("Barang dihapus dari katalog");
+}
+
+function settingsModal(){document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Pengaturan Toko</h3><button class="close" onclick="closeModal()">×</button></div><p class="smallnote">Masukkan nomor WhatsApp admin dalam format internasional tanpa tanda +. Contoh Indonesia: 62812xxxxxxx.</p><form onsubmit="saveSettings(event)"><div class="field"><label>Nama toko</label><input id="setStore" value="${esc(settings.store)}"></div><div class="field"><label>Nomor WhatsApp admin *</label><input id="setWa" required value="${esc(settings.wa)}" placeholder="62812xxxxxxxx"></div><div class="field"><label>Nama admin (opsional)</label><input id="setOwner" value="${esc(settings.owner)}"></div><div class="field"><label>Alamat toko (opsional)</label><textarea id="setAddress">${esc(settings.address)}</textarea></div><button class="btn primary" type="submit">Simpan Pengaturan</button></form><p class="smallnote">Data tersimpan di browser HP ini.</p></div></div>`}
+function saveSettings(e){e.preventDefault();settings={store:document.getElementById("setStore").value.trim()||"Camilatos",wa:document.getElementById("setWa").value.trim(),owner:document.getElementById("setOwner").value.trim(),address:document.getElementById("setAddress").value.trim()};save();closeModal();toast("Pengaturan tersimpan")}
+function aboutModal(){document.getElementById("modalRoot").innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h3>Tentang Camilatos</h3><button class="close" onclick="closeModal()">×</button></div><div style="text-align:center;padding:20px"><div style="font-size:60px">🍿</div><h2>Camilatos</h2><p>Aneka Cemilan • Enak Setiap Saat</p><p class="smallnote">Temukan camilan favorit untuk menemani waktu santai, kerja, dan momen bersama keluarga.</p><p class="smallnote">Prototype aplikasi katalog dan pemesanan via WhatsApp.</p></div><button class="btn primary" onclick="closeModal()">Tutup</button></div></div>`}
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function closeModal(){document.getElementById("modalRoot").innerHTML=""}
+function toast(msg){const el=document.createElement("div");el.className="toast";el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),2100)}
+updateCount();render();
+
+window.addEventListener("load",()=>{const splash=document.getElementById("splashScreen");setTimeout(()=>splash&&splash.classList.add("hide"),1650);});
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}
+
+</script>
+</body>
+</html>

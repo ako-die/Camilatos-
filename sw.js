@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camilatos-v5-1';
+const CACHE_NAME = 'camilatos-v5-2';
 self.addEventListener('install', event => {
   self.skipWaiting();
 });
